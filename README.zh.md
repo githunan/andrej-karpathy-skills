@@ -98,6 +98,8 @@ LLM 经常默默选择一种解释然后执行。这个原则强制明确推理�
 
 ## 安装
 
+### 用于 Claude Code
+
 **选项 A：Claude Code 插件（推荐）**
 
 在 Claude Code 中，首先添加插件市场：
@@ -125,9 +127,98 @@ echo "" >> CLAUDE.md
 curl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md >> CLAUDE.md
 ```
 
-## 在 Cursor 中使用
+### 用于 Cursor
 
-本仓库包含一个已提交的 Cursor 项目规则 ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc))，因此在 Cursor 中打开项目时同样适用这些指南。详情请参见 **[CURSOR.md](CURSOR.md)**，包括如何在其他项目中使用该规则，以及它与 Claude Code 的关系。
+本仓库包含一个已提交的 Cursor 项目规则 ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc))，因此在 Cursor 中打开项目时同样适用这些指南。
+
+在其他项目中使用：
+```bash
+mkdir -p .cursor/rules
+curl -o .cursor/rules/karpathy-guidelines.mdc https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/.cursor/rules/karpathy-guidelines.mdc
+```
+
+### 用于 Codex / GitHub Copilot
+
+**新增：** 使用 [`CODEX.md`](./CODEX.md) 获得 OpenAI Codex 和 GitHub Copilot 优化后的指南！
+
+#### 选项 A：下载 CODEX.md
+
+```bash
+# 下载到你的项目根目录
+curl -o CODEX.md https://raw.githubusercontent.com/githunan/andrej-karpathy-skills/add-codex-guidelines/CODEX.md
+```
+
+#### 选项 B：GitHub Copilot 指令文件（VS Code）
+
+```bash
+# 创建 .github 目录（如果不存在）
+mkdir -p .github
+
+# 将 Codex 指南下载为 Copilot 指令文件
+curl https://raw.githubusercontent.com/githunan/andrej-karpathy-skills/add-codex-guidelines/CODEX.md \
+  -o .github/copilot-instructions.md
+```
+
+GitHub Copilot 会自动读取 `.github/copilot-instructions.md` 文件。
+
+#### 选项 C：作为参考使用
+
+在使用 Codex CLI 或 API 时作为参考：
+```bash
+# 在编码时参考这些原则
+cat CODEX.md
+```
+
+#### 选项 D：提交到 Git
+
+在团队项目中共享：
+```bash
+git add CODEX.md
+git commit -m "Add Codex guidelines"
+git push
+```
+
+### 使用场景
+
+| 使用场景 | 推荐设置 |
+|---------|--------|
+| **VS Code 中的 GitHub Copilot** | 复制到 `.github/copilot-instructions.md` |
+| **OpenAI Codex CLI** | 复制到项目根目录作为 `CODEX.md` |
+| **编码时的参考** | 在编码时保持打开 |
+| **团队指南** | 提交到 Git，与团队共享 |
+
+### CLAUDE.md 与 CODEX.md 的区别
+
+| 方面 | CLAUDE.md | CODEX.md |
+|-----|-----------|---------|
+| **工具** | Claude Code IDE | Codex API / GitHub Copilot |
+| **交互模式** | 多轮对话 | 单轮代码补全 |
+| **上下文** | 大窗口，可以推理 | 有限，需要紧凑的上下文 |
+| **主要风险** | 过度讨论 | 过度抽象、产生幻觉 |
+| **测试策略** | 讨论测试方案 | 必须立即测试 |
+| **使用方式** | IDE 插件或 `.claude` | `.github/copilot-instructions.md` 或项目根目录 |
+
+### 安装速查表
+
+```bash
+# Clone 或下载此仓库
+git clone https://github.com/githunan/andrej-karpathy-skills.git
+cd andrej-karpathy-skills
+
+# 对于你的项目中的 Claude Code
+cp CLAUDE.md /你的/项目/路径/
+
+# 对于 Cursor IDE
+mkdir -p /你的/项目/路径/.cursor/rules
+cp .cursor/rules/karpathy-guidelines.mdc /你的/项目/路径/.cursor/rules/
+
+# 对于 GitHub Copilot
+mkdir -p /你的/项目/路径/.github
+cp CODEX.md /你的/项目/路径/.github/copilot-instructions.md
+
+# 对于独立的 Codex 参考
+cp CODEX.md /你的/项目/路径/
+```
 
 ## 核心洞察
 
@@ -146,9 +237,14 @@ curl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/
 - **澄清问题在实现之前提出** —— 而不是在犯错之后
 - **干净、精简的 PR** —— 没有顺带的重构或"改进"
 
+**对于 Codex/Copilot 特别地：**
+- **过度抽象的补全更少** —— Codex 尊重你的简洁意图
+- **产生幻觉更少** —— 更好的测试实践能捕捉到不存在的函数
+- **代码集成更顺畅** —— 补全能匹配你文件中的现有模式
+
 ## 定制
 
-这些指南设计用于与项目特定指令合并。将它们添加到你现有的 `CLAUDE.md` 或创建一个新的。
+这些指南设计用于与项目特定指令合并。将它们添加到你现有的指令文件或创建一个新的。
 
 对于项目特定规则，添加如下章节：
 
@@ -162,9 +258,17 @@ curl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/
 
 ## 权衡说明
 
-这些指南倾向于**谨慎而非速度**。对于琐碎的任务（简单的拼写错误修复、显而易见的一行修改），请自行判断 —— 并非每个改动都需要完整的严谨流程。
+这些指南倾向于**谨慎而非速度**。对于琐碎的任务（简单的拼写错误修复、显而易见的一行修改），请自行判断 —— 并非每个改动都需要完整的严格性。
 
 目标是减少非琐碎工作中的代价高昂的错误，而不是拖慢简单任务。
+
+## 仓库中的文件
+
+- **[CLAUDE.md](./CLAUDE.md)** - Claude Code 指南
+- **[CODEX.md](./CODEX.md)** - OpenAI Codex 和 GitHub Copilot 指南（新增）
+- **[CURSOR.md](./CURSOR.md)** - Cursor IDE 设置说明
+- **[EXAMPLES.md](./EXAMPLES.md)** - 四个原则的详细示例（编码前/编码后对比）
+- **[.cursor/rules/karpathy-guidelines.mdc](.cursor/rules/karpathy-guidelines.mdc)** - Cursor IDE 规则文件
 
 ## 许可
 
