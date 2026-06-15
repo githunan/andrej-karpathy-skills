@@ -12,7 +12,7 @@ English | [简体中文](./README.zh.md)
 
 From Andrej's post:
 
-> "The models make wrong assumptions on your behalf and just run along with them without checking. They don't manage their confusion, don't seek clarifications, don't surface inconsistencies, don't present tradeoffs, don't push back when they should."
+> "The models make wrong assumptions on your behalf and just run along with them without checking. They don't manage their confusion, don't seek clarifications, don't surface inconsistencies, don't [...]
 
 > "They really like to overcomplicate code and APIs, bloat abstractions, don't clean up dead code... implement a bloated construction over 1000 lines when 100 would do."
 
@@ -98,6 +98,8 @@ Strong success criteria let the LLM loop independently. Weak criteria ("make it 
 
 ## Install
 
+### For Claude Code
+
 **Option A: Claude Code Plugin (recommended)**
 
 From within Claude Code, first add the marketplace:
@@ -125,9 +127,97 @@ echo "" >> CLAUDE.md
 curl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md >> CLAUDE.md
 ```
 
-## Using with Cursor
+### For Cursor
 
-This repository includes a committed Cursor project rule ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc)) so the same guidelines apply when you open the project in Cursor. See **[CURSOR.md](CURSOR.md)** for setup, using the rule in other projects, and how this relates to Claude Code.
+This repository includes a committed Cursor project rule ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc)) so the same guidelines apply when you open the project.
+
+To use in another project:
+```bash
+mkdir -p .cursor/rules
+curl -o .cursor/rules/karpathy-guidelines.mdc https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/.cursor/rules/karpathy-guidelines.mdc
+```
+
+### For Codex / GitHub Copilot
+
+**New:** Use [`CODEX.md`](./CODEX.md) for OpenAI Codex and GitHub Copilot optimized guidelines!
+
+#### Option A: Download CODEX.md
+
+```bash
+# For your project root
+curl -o CODEX.md https://raw.githubusercontent.com/githunan/andrej-karpathy-skills/add-codex-guidelines/CODEX.md
+```
+
+#### Option B: GitHub Copilot Instructions (VS Code)
+
+```bash
+# Create .github directory if it doesn't exist
+mkdir -p .github
+
+# Download Codex guidelines as Copilot instructions
+curl https://raw.githubusercontent.com/githunan/andrej-karpathy-skills/add-codex-guidelines/CODEX.md \
+  -o .github/copilot-instructions.md
+```
+
+GitHub Copilot will automatically read from `.github/copilot-instructions.md`.
+
+#### Option C: Cursor Rules for Codex Style
+
+If you want Codex guidelines in Cursor:
+```bash
+mkdir -p .cursor/rules
+# Copy CODEX.md content and convert to .mdc format
+```
+
+#### Option D: Use as Reference
+
+Simply reference the principles when using Codex CLI or API:
+```bash
+# When using Codex API or CLI tools
+cat CODEX.md | # Review the principles while coding
+```
+
+### Use Cases for CODEX.md
+
+| Use Case | Setup |
+|----------|-------|
+| **GitHub Copilot in VS Code** | Copy to `.github/copilot-instructions.md` |
+| **OpenAI Codex CLI** | Copy to project root as `CODEX.md` |
+| **Reference during coding** | Keep open while using any Codex-based tool |
+| **Team guidelines** | Commit to git, share with team |
+
+### Key Differences: CLAUDE.md vs CODEX.md
+
+| Aspect | CLAUDE.md | CODEX.md |
+|--------|-----------|---------|
+| **Tool** | Claude Code IDE | Codex API / GitHub Copilot |
+| **Interaction** | Multi-turn dialogue | Single-turn completion |
+| **Context** | Large window, can reason | Limited, needs tight context |
+| **Focus** | Reasoning first | Completion speed |
+| **Main Risk** | Over-discussing | Over-abstracting, hallucinating |
+| **Use** | IDE plugin or `.claude` | `.github/copilot-instructions.md` or project root |
+
+### Installation Summary
+
+```bash
+# Clone or download this repo
+git clone https://github.com/githunan/andrej-karpathy-skills.git
+cd andrej-karpathy-skills
+
+# For Claude Code in your project
+cp CLAUDE.md /your/project/
+
+# For Cursor IDE
+mkdir -p /your/project/.cursor/rules
+cp .cursor/rules/karpathy-guidelines.mdc /your/project/.cursor/rules/
+
+# For GitHub Copilot
+mkdir -p /your/project/.github
+cp CODEX.md /your/project/.github/copilot-instructions.md
+
+# For standalone Codex reference
+cp CODEX.md /your/project/
+```
 
 ## Key Insight
 
@@ -146,9 +236,14 @@ These guidelines are working if you see:
 - **Clarifying questions come before implementation** — Not after mistakes
 - **Clean, minimal PRs** — No drive-by refactoring or "improvements"
 
+For **Codex/Copilot** specifically:
+- **Fewer over-abstracted completions** — Codex respects your simplicity intent
+- **Fewer hallucinations** — Better testing practices catch non-existent functions
+- **Better code integration** — Completions match your file's existing patterns
+
 ## Customization
 
-These guidelines are designed to be merged with project-specific instructions. Add them to your existing `CLAUDE.md` or create a new one.
+These guidelines are designed to be merged with project-specific instructions. Add them to your existing instruction file or create a new one.
 
 For project-specific rules, add sections like:
 
@@ -165,6 +260,14 @@ For project-specific rules, add sections like:
 These guidelines bias toward **caution over speed**. For trivial tasks (simple typo fixes, obvious one-liners), use judgment — not every change needs the full rigor.
 
 The goal is reducing costly mistakes on non-trivial work, not slowing down simple tasks.
+
+## Files in This Repository
+
+- **[CLAUDE.md](./CLAUDE.md)** - Guidelines for Claude Code
+- **[CODEX.md](./CODEX.md)** - Guidelines for OpenAI Codex and GitHub Copilot (NEW)
+- **[CURSOR.md](./CURSOR.md)** - Setup instructions for Cursor IDE
+- **[EXAMPLES.md](./EXAMPLES.md)** - Detailed before/after examples for all four principles
+- **[.cursor/rules/karpathy-guidelines.mdc](.cursor/rules/karpathy-guidelines.mdc)** - Cursor IDE rule file
 
 ## License
 
